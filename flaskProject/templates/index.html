@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>TODO List</h1>
+        <form action="{{ url_for('add_entry') }}" method="post">
+            <input type="text" name="title" placeholder="Title" required>
+            <button type="submit" class="add">Add Entry</button>
+        </form>
+        <ul>
+            {% for entry in entries %}
+                <li>
+                    <h2>{{ entry.title }}</h2>
+                    <ul>
+                        {% for content in entry.contents %}
+                            <li>
+                                {{ content.content_text }}
+                                <a href="{{ url_for('edit_content', id=content.id) }}"><button class="edit">Edit Content</button></a>
+                                <form action="{{ url_for('delete_content', id=content.id) }}" method="post" style="display:inline;">
+                                    <button type="submit" class="delete">Delete Content</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <form action="{{ url_for('add_content', id=entry.id) }}" method="post">
+                        <textarea name="content_text" placeholder="Content" required></textarea>
+                        <button type="submit" class="add-content">Add Content</button>
+                    </form>
+                    <a href="{{ url_for('edit_entry', id=entry.id) }}"><button class="edit">Edit Entry</button></a>
+                    <form action="{{ url_for('delete_entry', id=entry.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="delete">Delete Entry</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
